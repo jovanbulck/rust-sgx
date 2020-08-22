@@ -51,9 +51,11 @@ use self::interface::{Handler, OutputBuffer};
 
 const EV_ABORT: u64 = 0b0000_0000_0000_1000;
 
-// FIXME: find a proper size for these queues
+// Experiments show that tha actual size of these queues is less important than
+// the ratio between them. It appears that a much larger return queue performs
+// much better when multiple enclave threads send usercalls.
 const USERCALL_QUEUE_SIZE: usize = 16;
-const RETURN_QUEUE_SIZE: usize = 16;
+const RETURN_QUEUE_SIZE: usize = 1024;
 
 enum UsercallSendData {
     Sync(ThreadResult<ErasedTcs>, RunningTcs, RefCell<[u8; 1024]>),
