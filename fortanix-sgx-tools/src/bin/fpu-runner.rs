@@ -3,7 +3,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-#![feature(llvm_asm)]
+#![feature(asm)]
 
 extern crate aesm_client;
 extern crate enclave_runner;
@@ -77,13 +77,13 @@ fn main() -> Result<(), Error> {
         if args.is_present("mmx")
         {
             println!("[attacker] putting CPU in MMX mode..");
-            llvm_asm!("paddd %mm0,%mm0");
+            asm!("paddd %mm0,%mm0");
         }
         if args.is_present("fpu")
         {
             let fpucw = args.value_of("fpu").unwrap().parse::<u16>().unwrap();
             println!("[attacker] poisoning FPUCW with {:#x}", fpucw);
-            llvm_asm!("fldcw $0"
+            asm!("fldcw $0"
                         :: "m"(fpucw)
                       );
         }
